@@ -17,13 +17,26 @@ export const getProductsQuantityByMonth = async (c: Context) => {
   const { rows } = await db.query(
     `
     SELECT 
-      TO_CHAR(invoice_date, 'Mon YYYY') as month,
+      CASE 
+        WHEN EXTRACT(MONTH FROM invoice_date) = 1 THEN 'Ene ' || EXTRACT(YEAR FROM invoice_date)
+        WHEN EXTRACT(MONTH FROM invoice_date) = 2 THEN 'Feb ' || EXTRACT(YEAR FROM invoice_date)
+        WHEN EXTRACT(MONTH FROM invoice_date) = 3 THEN 'Mar ' || EXTRACT(YEAR FROM invoice_date)
+        WHEN EXTRACT(MONTH FROM invoice_date) = 4 THEN 'Abr ' || EXTRACT(YEAR FROM invoice_date)
+        WHEN EXTRACT(MONTH FROM invoice_date) = 5 THEN 'May ' || EXTRACT(YEAR FROM invoice_date)
+        WHEN EXTRACT(MONTH FROM invoice_date) = 6 THEN 'Jun ' || EXTRACT(YEAR FROM invoice_date)
+        WHEN EXTRACT(MONTH FROM invoice_date) = 7 THEN 'Jul ' || EXTRACT(YEAR FROM invoice_date)
+        WHEN EXTRACT(MONTH FROM invoice_date) = 8 THEN 'Ago ' || EXTRACT(YEAR FROM invoice_date)
+        WHEN EXTRACT(MONTH FROM invoice_date) = 9 THEN 'Sep ' || EXTRACT(YEAR FROM invoice_date)
+        WHEN EXTRACT(MONTH FROM invoice_date) = 10 THEN 'Oct ' || EXTRACT(YEAR FROM invoice_date)
+        WHEN EXTRACT(MONTH FROM invoice_date) = 11 THEN 'Nov ' || EXTRACT(YEAR FROM invoice_date)
+        WHEN EXTRACT(MONTH FROM invoice_date) = 12 THEN 'Dic ' || EXTRACT(YEAR FROM invoice_date)
+      END as month,
       SUM(quantity) as quantity
     FROM kardex
     WHERE item_id = $1
       AND invoice_date >= (CURRENT_DATE - INTERVAL '12 months')
       AND deleted_at IS NULL
-    GROUP BY TO_CHAR(invoice_date, 'Mon YYYY'), DATE_TRUNC('month', invoice_date)
+    GROUP BY DATE_TRUNC('month', invoice_date), EXTRACT(MONTH FROM invoice_date), EXTRACT(YEAR FROM invoice_date)
     ORDER BY DATE_TRUNC('month', invoice_date) DESC
     `,
     [itemId]
