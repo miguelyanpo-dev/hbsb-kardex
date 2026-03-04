@@ -117,10 +117,9 @@ export const getTopCustomersByProduct = async (c: Context) => {
     }
 
     data.push({
-      [customer.person_name]: {
-        "cantidad total": customer.total_quantity.toString(),
-        ...monthlyData
-      }
+      client_name: customer.person_name,
+      cantidad_total: customer.total_quantity.toString(),
+      meses: monthlyData
     });
   }
 

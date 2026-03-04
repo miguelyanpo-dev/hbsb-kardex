@@ -165,21 +165,11 @@ router.openapi(
           'application/json': {
             schema: z.object({
               success: z.boolean(),
-              data: z.array(z.record(z.string(), z.object({
-                "cantidad total": z.string(),
-                "Mar 2026": z.string().optional(),
-                "Feb 2026": z.string().optional(),
-                "Ene 2026": z.string().optional(),
-                "Dic 2025": z.string().optional(),
-                "Nov 2025": z.string().optional(),
-                "Oct 2025": z.string().optional(),
-                "Sep 2025": z.string().optional(),
-                "Ago 2025": z.string().optional(),
-                "Jul 2025": z.string().optional(),
-                "Jun 2025": z.string().optional(),
-                "May 2025": z.string().optional(),
-                "Abr 2025": z.string().optional()
-              }))),
+              data: z.array(z.object({
+                client_name: z.string(),
+                cantidad_total: z.string(),
+                meses: z.record(z.string(), z.string())
+              })),
               data_items: z.number(),
               page_current: z.number(),
               page_total: z.number(),
